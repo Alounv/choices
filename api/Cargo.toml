@@ -1,13 +1,18 @@
 [package]
 name = "choices"
 version = "1.0.0"
-authors = ["Aloun Vangkeosay https://github.com/Alounv"]
+authors = [ "Aloun Vangkeosay https://github.com/Alounv" ]
 edition = "2021"
 
 [dependencies]
 http = "0.1"
 vercel_lambda = "*"
+serde_json = "1.0"
 
-# [lib]
-# name = "util"
-# path = "_util.rs"
+  [dependencies.serde]
+  version = "1.0"
+  features = [ "derive" ]
+
+[[bin]]
+name = "choices"
+path = "/Users/alounvangkeosay/Dev/choices/api/choices.rs"
