@@ -1,0 +1,13 @@
+[package]
+name = "choices"
+version = "1.0.0"
+authors = ["Aloun Vangkeosay https://github.com/Alounv"]
+edition = "2021"
+
+[dependencies]
+http = "0.1"
+vercel_lambda = "*"
+
+# [lib]
+# name = "util"
+# path = "_util.rs"

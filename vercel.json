@@ -1,0 +1,18 @@
+{
+  "headers": [
+    {
+      "source": "/build/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, s-maxage=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "functions": {
+    "api/**/*.rs": {
+      "runtime": "vercel-rust@3.1.2"
+    }
+  }
+}
