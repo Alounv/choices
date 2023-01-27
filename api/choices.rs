@@ -1,23 +1,14 @@
 use http::StatusCode;
-use serde::{Deserialize, Serialize};
 use std::error::Error;
 use vercel_lambda::{error::VercelError, lambda, IntoResponse, Request, Response};
 
-#[derive(Deserialize)]
-struct ParsedBody {
-    test: String,
-}
-
-#[derive(Serialize)]
-struct Data {
-    data: String,
-}
+pub mod calculations;
 
 fn handler(req: Request) -> Result<impl IntoResponse, VercelError> {
     let body = req.into_body();
-    let input: ParsedBody = serde_json::from_slice(&body).unwrap();
+    let input: calculations::Input = serde_json::from_slice(&body).unwrap();
 
-    let results = Data { data: input.test };
+    let results = calculations::main(&input).unwrap();
 
     let data = serde_json::json!(results);
     let response = Response::builder()
