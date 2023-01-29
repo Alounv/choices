@@ -18,20 +18,20 @@ export default component$(({ state }: { state: State }) => {
         {isLoading ? `Loading...` : `Request duration: ${reqDuration}ms`}
       </div>
 
-      <div class="flex gap-2">
+      <div>
         {results.map((_, index) => {
           const isSelected = index === local.stepIndex;
           return (
-            <button
-              class={`bg-slate-100 p-2 border-2 rounded-md ${
-                isSelected ? "bg-blue-200" : ""
-              }`}
-              onClick$={() => {
-                local.stepIndex = index;
-              }}
-            >
-              {index}
-            </button>
+            <label class="p-2">
+              <input
+                type="radio"
+                value={index}
+                checked={isSelected}
+                onClick$={() => {
+                  local.stepIndex = index;
+                }}
+              />
+            </label>
           );
         })}
       </div>

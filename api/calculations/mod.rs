@@ -43,8 +43,8 @@ fn get_initial_state(wishes: &HashMap<String, Vec<String>>) -> HashMap<String, P
 
 pub fn main(input: &Input) -> Result<Data, Box<dyn Error>> {
     let mut projects = input.projects.clone();
-    let mut steps = vec![];
     let mut state = get_initial_state(&input.wishes);
+    let mut steps = vec![state.clone()];
 
     for _i in 0..projects.len() {
         let next_person_name: String = get_next_person::main(&mut state);

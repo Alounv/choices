@@ -56,7 +56,7 @@ fn if_no_conflicts_should_give_people_what_they_want() {
         }
     );
 
-    assert_eq!(steps.len(), 6);
+    assert_eq!(steps.len(), 7);
 }
 
 #[test]
