@@ -1,7 +1,8 @@
 import { component$, useStore } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import Button from "~/components/button";
-import InputComponent from "~/components/input";
+import Input from "~/components/input";
+import Results from "~/components/results";
 import type { State } from "~/components/types";
 
 export default component$(() => {
@@ -18,17 +19,9 @@ export default component$(() => {
 
   return (
     <div class="flex flex-col gap-3">
-      <h2>Please enter your wishes and projects</h2>
-      <InputComponent state={state} />
+      <Input state={state} />
       <Button state={state} />
-
-      <h2>Results</h2>
-      <div>
-        {state.isLoading
-          ? "LOADING..."
-          : `Request duration: ${state.reqDuration}ms`}
-      </div>
-      <div>{state.results.length > 0 && JSON.stringify(state.results)}</div>
+      <Results state={state} />
     </div>
   );
 });
@@ -38,8 +31,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: "description",
-      content:
-        "Project Choice is a tool to fairly assign projects to participants",
+      content: "Project Choice is a tool to assign projects",
     },
   ],
 };
