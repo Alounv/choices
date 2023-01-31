@@ -10,20 +10,25 @@ export const ProjectsInput = component$(() => {
 
   return (
     <>
-      {sortedProjects.map(([name, value]) => (
-        <Project key={name} name={name} value={value} />
-      ))}
-      <button
-        class="bg-slate-400 text-white p-2 rounded-md self-start"
-        onClick$={() => {
-          state.projects = {
-            ...state.projects,
-            [`New Project (${sortedProjects.length + 1})`]: 1,
-          };
-        }}
-      >
-        Add project
-      </button>
+      <h2>Projects</h2>
+
+      <div class="flex flex-col gap-1">
+        {sortedProjects.map(([name, value]) => (
+          <Project key={name} name={name} value={value} />
+        ))}
+
+        <button
+          class="px-4 py-1 text-blue-500 rounded-md self-start"
+          onClick$={() => {
+            state.projects = {
+              ...state.projects,
+              [`New Project (${sortedProjects.length + 1})`]: 1,
+            };
+          }}
+        >
+          ➕ add project
+        </button>
+      </div>
     </>
   );
 });
@@ -44,7 +49,7 @@ export const Project = component$(
             projects[newName] = value;
             state.projects = { ...projects };
           }}
-          class="flex-1 bg-slate-100 p-2 border-2 rounded-md"
+          class="flex-1 bg-slate-50 text-slate-400 px-2 rounded-md"
         />
         <input
           type="number"
@@ -54,7 +59,7 @@ export const Project = component$(
             projects[name] = newValue;
             state.projects = { ...projects };
           }}
-          class="w-16 bg-slate-100 p-2 border-2 rounded-md"
+          class="w-16 bg-slate-50 px-2  rounded-md"
         />
         <button
           onClick$={() => {
