@@ -2,7 +2,7 @@ import { component$, useContext } from "@builder.io/qwik";
 import { InputCtx } from "~/routes";
 import type { Input } from "./types";
 
-export default component$(() => {
+export const InputArea = component$(() => {
   const state = useContext<Input>(InputCtx);
   const { projects } = state;
   const sortedProjects = Object.entries(projects);

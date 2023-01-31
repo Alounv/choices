@@ -15,7 +15,7 @@ export async function getSteps(
   return resp.json();
 }
 
-export default component$(() => {
+export const SubmitButton = component$(() => {
   const state = useContext(ResultsCtx);
   const { error: inputError, wishes, projects } = useContext(InputCtx);
   return (

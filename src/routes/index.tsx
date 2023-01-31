@@ -5,9 +5,9 @@ import {
   useStore,
 } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import SubmitButton from "~/components/button";
-import InputArea from "~/components/input";
-import ResultsDisplay from "~/components/results";
+import { SubmitButton } from "~/components/button";
+import { InputArea } from "~/components/input";
+import { ResultsDisplay } from "~/components/results";
 import type { Results } from "~/components/types";
 import type { Input } from "~/components/types";
 import { INITIAL_PROJECTS, INITIAL_WISHES } from "~/mock/input";

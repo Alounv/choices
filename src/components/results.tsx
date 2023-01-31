@@ -1,15 +1,13 @@
-import { component$, useContext, useStore } from "@builder.io/qwik";
+import { component$, useContext, useSignal } from "@builder.io/qwik";
 import { ResultsCtx } from "~/routes";
+import { ResultsNavigator } from "./navigator";
+import { UserResult } from "./user-result";
 
-export default component$(() => {
+export const ResultsDisplay = component$(() => {
   const { error, reqDuration, isLoading, results } = useContext(ResultsCtx);
-  const local = useStore({ stepIndex: 0 });
-  const currentStep = results[local.stepIndex] || {};
+  const stepIndex = useSignal<number>(0);
+  const currentStep = results[stepIndex.value] || {};
   const users = Object.keys(currentStep);
-  const firstWishes = users.map((user) => ({
-    user,
-    project: currentStep[user].wishes[0],
-  }));
 
   return (
     <>
@@ -19,66 +17,13 @@ export default component$(() => {
         {error && <div class="text-red-500">{error.message}</div>}
       </div>
 
-      <div>
-        {results.map((_, index) => {
-          const isSelected = index === local.stepIndex;
-          return (
-            <label class="p-2">
-              <input
-                type="radio"
-                value={index}
-                checked={isSelected}
-                onClick$={() => {
-                  local.stepIndex = index;
-                }}
-              />
-            </label>
-          );
-        })}
-      </div>
+      <ResultsNavigator stepIndex={stepIndex} resultsCount={results.length} />
 
       {results.length > 0 && (
         <ul class="flex flex-col gap-4">
-          {users.map((name) => {
-            const { denials, wishes, points, assigned } = currentStep[name];
-            wishes.reverse();
-            return (
-              <li class="flex gap-2 items-center">
-                <span class="font-bold">{name}</span>
-                <span> {Array(points).fill("⚬").join("")}</span>
-                <span class="text-xs">
-                  {Array(denials).fill("🚫").join("")}
-                </span>
-                <span class="flex-1" />
-                {wishes.map((w, i) => {
-                  const isLast = i === wishes.length - 1;
-                  const otherFirstWishes = firstWishes
-                    .filter((l) => l.user !== name)
-                    .map((l) => l.project);
-                  const isDisputed = isLast && otherFirstWishes.includes(w);
-                  return (
-                    <span
-                      class={`border-2 px-1 ${isLast ? "font-bold" : ""} ${
-                        isDisputed ? "border-red-700 bg-red-700 text-white" : ""
-                      } `}
-                    >
-                      {w}
-                    </span>
-                  );
-                })}
-                <span> ➡️ </span>
-                {assigned.map((a) => {
-                  return (
-                    <span
-                      class={`border-2 text-white px-1 border-sky-500 bg-sky-500`}
-                    >
-                      {a}
-                    </span>
-                  );
-                })}
-              </li>
-            );
-          })}
+          {users.map((name) => (
+            <UserResult name={name} currentStep={currentStep} />
+          ))}
         </ul>
       )}
     </>
