@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { Step } from "./types";
+import type { Step } from "./types";
 
 export const UserResult = component$(
   ({ name, currentStep }: { name: string; currentStep: Step }) => {
