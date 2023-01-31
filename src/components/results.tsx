@@ -1,8 +1,8 @@
-import { component$, useStore } from "@builder.io/qwik";
-import type { State } from "~/components/types";
+import { component$, useContext, useStore } from "@builder.io/qwik";
+import { ResultsCtx } from "~/routes";
 
-export default component$(({ state }: { state: State }) => {
-  const { results, isLoading, reqDuration } = state;
+export default component$(() => {
+  const { error, reqDuration, isLoading, results } = useContext(ResultsCtx);
   const local = useStore({ stepIndex: 0 });
   const currentStep = results[local.stepIndex] || {};
   const users = Object.keys(currentStep);
@@ -16,6 +16,7 @@ export default component$(({ state }: { state: State }) => {
       <h2>Results</h2>
       <div>
         {isLoading ? `Loading...` : `Request duration: ${reqDuration}ms`}
+        {error && <div class="text-red-500">{error.message}</div>}
       </div>
 
       <div>

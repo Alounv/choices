@@ -1,8 +1,9 @@
-import { component$ } from "@builder.io/qwik";
-import type { Input, State, Step } from "./types";
+import { component$, useContext } from "@builder.io/qwik";
+import { InputCtx, ResultsCtx } from "~/routes";
+import type { Input, Step } from "./types";
 
 export async function getSteps(
-  input: Input,
+  input: Pick<Input, "projects" | "wishes">,
   controller?: AbortController
 ): Promise<{ steps: Step[] }> {
   const resp = await fetch(`api/choices`, {
@@ -14,24 +15,28 @@ export async function getSteps(
   return resp.json();
 }
 
-export default component$(({ state }: { state: State }) => {
+export default component$(() => {
+  const state = useContext(ResultsCtx);
+  const { error: inputError, wishes, projects } = useContext(InputCtx);
   return (
     <div
       class={`flex align-center ${
-        state.inputError ? "justify-between" : "justify-end"
+        inputError ? "justify-between" : "justify-end"
       }`}
     >
-      {state.inputError && (
-        <div class="text-red-500">{state.inputError.message}</div>
-      )}
+      {inputError && <div class="text-red-500">{inputError.message}</div>}
       <button
-        disabled={!!state.inputError || state.isLoading}
+        disabled={!!inputError || state.isLoading}
         class="self-end disabled:opacity-50 bg-orange-500 enabled:hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
         onClick$={async () => {
           state.isLoading = true;
           const time = Date.now();
-          const data = await getSteps(state.input);
-          state.results = data.steps;
+          try {
+            const data = await getSteps({ wishes, projects });
+            state.results = data.steps;
+          } catch (e) {
+            state.error = e as Error;
+          }
           state.reqDuration = Date.now() - time;
           state.isLoading = false;
         }}

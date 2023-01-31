@@ -1,14 +1,17 @@
+export type Projects = Record<string, number>;
+export type Wishes = Record<string, string[]>;
+
 export interface Input {
-  wishes: Record<string, string[]>;
-  projects: Record<string, number>;
+  wishes: Wishes;
+  projects: Projects;
+  error: Error | null;
 }
 
-export interface State {
-  input: Input;
-  inputError: Error | null;
-  isLoading: boolean;
-  results: Step[];
+export interface Results {
   reqDuration: number;
+  results: Step[];
+  isLoading: boolean;
+  error: Error | null;
 }
 
 export type Step = Record<
