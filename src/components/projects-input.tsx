@@ -59,7 +59,7 @@ export const Project = component$(
             projects[name] = newValue;
             state.projects = { ...projects };
           }}
-          class="w-16 bg-slate-50 px-2  rounded-md"
+          class="w-16 bg-slate-50 text-slate-400 px-2 rounded-md"
         />
         <button
           onClick$={() => {

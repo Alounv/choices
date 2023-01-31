@@ -1,4 +1,4 @@
-import { component$, useContext } from "@builder.io/qwik";
+import { component$, useContext, useSignal } from "@builder.io/qwik";
 import { InputCtx } from "~/routes";
 import type { Input } from "./types";
 
@@ -12,7 +12,7 @@ export const WishesInput = component$(() => {
     <>
       <h2>Preferences</h2>
 
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-3">
         {sortedUsers.map(([user, wishes]) => (
           <Wishes key={user} user={user} userWishes={wishes} />
         ))}
@@ -38,9 +38,10 @@ export const Wishes = component$(
     const state = useContext<Input>(InputCtx);
     const { wishes } = state;
     const projectsName = Object.keys(state.projects);
+    const hasError = useSignal(false);
 
     return (
-      <div class="flex gap-2">
+      <div class="flex gap-3">
         <input
           type="text"
           value={user}
@@ -63,13 +64,18 @@ export const Wishes = component$(
 
             if ([...new Set(newWishes)].length !== projectsName.length) {
               state.error = new Error("Please enter all projects");
+              hasError.value = true;
+            } else {
+              state.error = null;
+              hasError.value = false;
             }
 
             wishes[user] = newWishes;
             state.wishes = { ...wishes };
-            console.log(wishes);
           }}
-          class="flex-1 bg-slate-100 px-2 border-2 rounded-md"
+          class={`flex-1 bg-slate-100 px-2 border-2 rounded-md ${
+            hasError.value ? "border-red-500" : ""
+          }`}
         />
         <button
           onClick$={() => {
