@@ -1,6 +1,7 @@
 import {
   component$,
   createContext,
+  useClientEffect$,
   useContextProvider,
   useStore,
 } from "@builder.io/qwik";
@@ -13,13 +14,41 @@ import type { Input, Results } from "~/types";
 
 export const InputCtx = createContext<Input>("input-context");
 export const ResultsCtx = createContext<Results>("results-context");
+export const DEFAULT_STORE = {
+  projects: INITIAL_PROJECTS,
+  wishes: INITIAL_WISHES,
+  error: null,
+};
+
+export const getLocallyStoredStore = (): Input | null => {
+  try {
+    const localStore = JSON.parse(
+      localStorage.getItem("project-choice-input") || ""
+    );
+    return localStore;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
 
 export default component$(() => {
-  const inputStore = useStore<Input>({
-    projects: INITIAL_PROJECTS,
-    wishes: INITIAL_WISHES,
-    error: null,
+  const inputStore = useStore<Input>(DEFAULT_STORE);
+
+  useClientEffect$(() => {
+    const locallyStoredStore = getLocallyStoredStore();
+    if (locallyStoredStore) {
+      const { projects, wishes } = locallyStoredStore;
+      inputStore.projects = projects;
+      inputStore.wishes = wishes;
+    }
   });
+
+  useClientEffect$(({ track }) => {
+    track(inputStore);
+    localStorage.setItem("project-choice-input", JSON.stringify(inputStore));
+  });
+
   useContextProvider(InputCtx, inputStore);
 
   const resultStore = useStore<Results>({
