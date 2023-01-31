@@ -1,10 +1,11 @@
 import { component$, useContext, useSignal } from "@builder.io/qwik";
 import { InputCtx } from "~/routes";
-import type { Input } from "./types";
+import type { Input } from "../types";
 
 export const WishesInput = component$(() => {
   const state = useContext<Input>(InputCtx);
-  const { wishes } = state;
+  const { wishes, projects } = state;
+  const projectsName = Object.keys(projects);
   const sortedUsers = Object.entries(wishes);
   sortedUsers.sort(([A], [B]) => A.localeCompare(B));
 
@@ -20,9 +21,9 @@ export const WishesInput = component$(() => {
         <button
           class="px-4 py-1 text-blue-500 rounded-md self-start"
           onClick$={() => {
-            state.projects = {
-              ...state.projects,
-              [`New User (${sortedUsers.length + 1})`]: 1,
+            state.wishes = {
+              ...wishes,
+              [`New User (${sortedUsers.length + 1})`]: projectsName,
             };
           }}
         >
@@ -51,7 +52,7 @@ export const Wishes = component$(
             wishes[newUser] = userWishes;
             state.wishes = { ...wishes };
           }}
-          class="w-32 bg-slate-100 px-2 border-2 rounded-md"
+          class="w-32 bg-slate-100 px-2 border-2 rounded-sm"
         />
         <input
           type="array"
@@ -73,7 +74,7 @@ export const Wishes = component$(
             wishes[user] = newWishes;
             state.wishes = { ...wishes };
           }}
-          class={`flex-1 bg-slate-100 px-2 border-2 rounded-md ${
+          class={`flex-1 bg-slate-100 px-2 border-2 rounded-sm ${
             hasError.value ? "border-red-500" : ""
           }`}
         />

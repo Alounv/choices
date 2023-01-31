@@ -1,6 +1,6 @@
 import { component$, useContext } from "@builder.io/qwik";
 import { InputCtx } from "~/routes";
-import type { Input } from "./types";
+import type { Input } from "../types";
 
 export const ProjectsInput = component$(() => {
   const state = useContext(InputCtx);
@@ -13,16 +13,25 @@ export const ProjectsInput = component$(() => {
       <h2>Projects</h2>
 
       <div class="flex flex-col gap-1">
-        {sortedProjects.map(([name, value]) => (
-          <Project key={name} name={name} value={value} />
-        ))}
+        {sortedProjects.map(([name, { description, points }]) => {
+          return (
+            <Project
+              key={name}
+              name={name}
+              points={points}
+              description={description}
+            />
+          );
+        })}
 
         <button
           class="px-4 py-1 text-blue-500 rounded-md self-start"
           onClick$={() => {
+            const projectsCount = sortedProjects.length;
+            const name = String.fromCharCode(65 + projectsCount);
             state.projects = {
               ...state.projects,
-              [`New Project (${sortedProjects.length + 1})`]: 1,
+              [name]: { points: 1, description: "Project Name" },
             };
           }}
         >
@@ -34,32 +43,41 @@ export const ProjectsInput = component$(() => {
 });
 
 export const Project = component$(
-  ({ name, value }: { name: string; value: number }) => {
+  ({
+    name,
+    description,
+    points,
+  }: {
+    name: string;
+    points: number;
+    description: string;
+  }) => {
     const state = useContext<Input>(InputCtx);
     const { projects } = state;
 
     return (
       <div class="flex gap-2">
+        <label for={name} class="self-center">
+          {name}
+        </label>
         <input
+          id={name}
           type="text"
-          value={name}
-          onChange$={(event) => {
-            const newName = event.target.value;
-            delete projects[name];
-            projects[newName] = value;
+          value={description}
+          onChange$={(e) => {
+            projects[name].description = e.target.value;
             state.projects = { ...projects };
           }}
-          class="flex-1 bg-slate-50 text-slate-400 px-2 rounded-md"
+          class="flex-1 bg-slate-50 text-slate-400 px-2 rounded-sm"
         />
         <input
           type="number"
-          value={value}
-          onChange$={(event) => {
-            const newValue = parseInt(event.target.value);
-            projects[name] = newValue;
+          value={points}
+          onChange$={(e) => {
+            projects[name].points = parseInt(e.target.value);
             state.projects = { ...projects };
           }}
-          class="w-16 bg-slate-50 text-slate-400 px-2 rounded-md"
+          class="w-16 bg-slate-50 text-slate-400 px-2 rounded-sm"
         />
         <button
           onClick$={() => {

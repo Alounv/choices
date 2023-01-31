@@ -1,15 +1,23 @@
 import { component$, useContext } from "@builder.io/qwik";
 import { InputCtx, ResultsCtx } from "~/routes";
-import type { Input, Step } from "./types";
+import type { Input, Step } from "../types";
 
 export async function getSteps(
   input: Pick<Input, "projects" | "wishes">,
   controller?: AbortController
 ): Promise<{ steps: Step[] }> {
+  const { wishes } = input;
+  const projects = Object.entries(input.projects).reduce<
+    Record<string, number>
+  >((acc, [name, { points }]) => {
+    acc[name] = points;
+    return acc;
+  }, {});
+
   const resp = await fetch(`api/choices`, {
     signal: controller?.signal,
     method: "POST",
-    body: JSON.stringify(input),
+    body: JSON.stringify({ wishes, projects }),
   });
 
   return resp.json();

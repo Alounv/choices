@@ -8,9 +8,8 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { SubmitButton } from "~/components/button";
 import { InputArea } from "~/components/input";
 import { ResultsDisplay } from "~/components/results";
-import type { Results } from "~/components/types";
-import type { Input } from "~/components/types";
-import { INITIAL_PROJECTS, INITIAL_WISHES } from "~/mock/input";
+import { INITIAL_PROJECTS, INITIAL_WISHES } from "~/data/input";
+import type { Input, Results } from "~/types";
 
 export const InputCtx = createContext<Input>("input-context");
 export const ResultsCtx = createContext<Results>("results-context");
@@ -32,7 +31,7 @@ export default component$(() => {
   useContextProvider(ResultsCtx, resultStore);
 
   return (
-    <div class="flex flex-col gap-3">
+    <div class="flex flex-col gap-4">
       <InputArea />
       <SubmitButton />
       <ResultsDisplay />

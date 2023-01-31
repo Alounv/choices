@@ -1,4 +1,4 @@
-export type Projects = Record<string, number>;
+export type Projects = Record<string, { description: string; points: number }>;
 export type Wishes = Record<string, string[]>;
 
 export interface Input {
