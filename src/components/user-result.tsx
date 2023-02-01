@@ -10,14 +10,15 @@ export const UserResult = component$(
     }));
 
     const { denials, wishes, points, assigned } = currentStep[name];
-    wishes.reverse();
+    const reversedWishes = wishes.slice().reverse();
+
     return (
       <li class="flex gap-2 items-center">
         <span class="font-bold">{name}</span>
         <span> {Array(points).fill("⚬").join("")}</span>
         <span class="text-xs">{Array(denials).fill("🚫").join("")}</span>
         <span class="flex-1" />
-        {wishes.map((w, i) => {
+        {reversedWishes.map((w, i) => {
           const isLast = i === wishes.length - 1;
           const otherFirstWishes = firstWishes
             .filter((l) => l.user !== name)
