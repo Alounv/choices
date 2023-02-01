@@ -53,7 +53,7 @@ export default component$(() => {
 
   const resultStore = useStore<Results>({
     reqDuration: 0,
-    results: [],
+    results: [], //MOCK_RESULTS,
     isLoading: false,
     error: null,
   });

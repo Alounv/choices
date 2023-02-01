@@ -9,9 +9,10 @@ export const ResultsNavigator = component$(
     stepIndex: Signal<number>;
     resultsCount: number;
   }) => {
+    const steps = Array(resultsCount).fill(0);
     return (
       <div>
-        {Array(resultsCount).map((_, index) => {
+        {steps.map((_, index) => {
           const isSelected = index === stepIndex.value;
           return (
             <label class="p-2">
