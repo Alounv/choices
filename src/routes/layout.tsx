@@ -15,7 +15,7 @@ export default component$(() => {
         <footer class="mt-4">
           <a
             class="flex items-center justify-center gap-2"
-            href="https://github.com/Alounv/project-choice"
+            href="https://github.com/Alounv/choices"
             target="_blank"
           >
             Github
