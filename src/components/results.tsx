@@ -4,19 +4,32 @@ import {
   useContext,
   useSignal,
 } from "@builder.io/qwik";
-import { ResultsCtx } from "~/routes";
+import { InputCtx, ResultsCtx } from "~/routes";
+import type { Step } from "~/types";
 import { ResultsNavigator } from "./navigator";
 import { UserResult } from "./user-result";
 
 export const ResultsDisplay = component$(() => {
-  const inputStore = useContext(ResultsCtx);
-  const { error, reqDuration, isLoading, results } = inputStore;
+  const resultStore = useContext(ResultsCtx);
+  const { wishes } = useContext(InputCtx);
+  const { error, reqDuration, isLoading, results } = resultStore;
   const stepIndex = useSignal<number>(0);
-  const currentStep = results[stepIndex.value] || {};
+
+  const initialStep: Step = {};
+  Object.entries(wishes).forEach(([user, projects]) => {
+    initialStep[user] = {
+      denials: 0,
+      points: 0,
+      assigned: [],
+      wishes: projects,
+    };
+  });
+
+  const currentStep = results[stepIndex.value] || initialStep;
   const users = Object.keys(currentStep);
 
   useClientEffect$(({ track }) => {
-    const { results } = track(inputStore);
+    const { results } = track(resultStore);
     stepIndex.value = 0;
     const timer = setInterval(() => {
       if (stepIndex.value >= results.length - 1) {
@@ -41,13 +54,11 @@ export const ResultsDisplay = component$(() => {
 
       <ResultsNavigator stepIndex={stepIndex} resultsCount={results.length} />
 
-      {results.length > 0 && (
-        <ul class="flex flex-col gap-4">
-          {users.map((name) => (
-            <UserResult key={name} name={name} currentStep={currentStep} />
-          ))}
-        </ul>
-      )}
+      <ul class="flex flex-col gap-4">
+        {users.map((name) => (
+          <UserResult key={name} name={name} currentStep={currentStep} />
+        ))}
+      </ul>
     </>
   );
 });
